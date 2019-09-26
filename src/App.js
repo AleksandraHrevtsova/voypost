@@ -1,26 +1,40 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react';
+import TripsList from './components/Trips/TripsList';
+import TripFilter from './components/Trips/TripsFilter';
+import Legend from './components/Legend/Legend';
+import Priority from './utils/Priority';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+const fiterTrips = (trips, filter) => {
+  return trips.filter(trip =>
+    trip.fromName.toLowerCase().includes(filter.toLowerCase()),
   );
-}
+};
 
-export default App;
+export default class App extends Component {
+  state = {
+    trips: [],
+    filter: '',
+    isCreating: false,
+    isEditing: false,
+    selectedTripsId: null,
+  };
+
+  changeFilter = e => {
+    this.setState({ filter: e.target.value });
+  };
+
+  render() {
+    const { trips, filter } = this.state;
+    const filteredTrips = filrerTrips(trips, filter);
+
+    return (
+      <div>
+        <button type="button">Add Post</button>
+        <Legend items={legendOptions} />
+
+        <TripsFilter value={filter} onChangeFilter={this.changeFilter} />
+        <TripsList items={filteredTrips} />
+      </div>
+    );
+  }
+}
